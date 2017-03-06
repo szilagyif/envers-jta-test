@@ -63,6 +63,14 @@
             <version>1.0-SP1</version>
         </dependency>
 
+        <!-- https://mvnrepository.com/artifact/org.jboss.arquillian.core/arquillian-core-api -->
+        <dependency>
+            <groupId>org.jboss.arquillian.core</groupId>
+            <artifactId>arquillian-core-api</artifactId>
+            <version>1.1.12.Final</version>
+        </dependency>
+
+
         <dependency>
             <groupId>org.jboss.arquillian.junit</groupId>
             <artifactId>arquillian-junit-container</artifactId>
@@ -109,7 +117,6 @@
             <version>1.1.1</version>
         </dependency>
 
-
     </dependencies>
 
     <build>
@@ -127,6 +134,18 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>wildfly-arquillian-container-embedded</id>
+            <dependencies>
+                <!-- https://mvnrepository.com/artifact/org.wildfly/wildfly-arquillian-container-embedded -->
+                <dependency>
+                    <groupId>org.wildfly</groupId>
+                    <artifactId>wildfly-arquillian-container-embedded</artifactId>
+                    <version>8.2.1.Final</version>
+                </dependency>
+            </dependencies>
+        </profile>
+
         <profile>
             <id>arquillian-tomee-embedded</id>
             <dependencies>

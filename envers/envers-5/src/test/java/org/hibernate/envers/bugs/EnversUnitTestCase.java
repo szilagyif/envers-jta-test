@@ -14,7 +14,9 @@ import org.jboss.arquillian.container.test.api.Deployment;
 import org.jboss.arquillian.junit.Arquillian;
 import org.jboss.shrinkwrap.api.ArchivePaths;
 import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.EnterpriseArchive;
 import org.jboss.shrinkwrap.api.spec.JavaArchive;
+import org.jboss.shrinkwrap.api.spec.WebArchive;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
@@ -62,13 +64,17 @@ public class EnversUnitTestCase extends AbstractEnversTestCase {
 	}
 
 	@Deployment
-	public static JavaArchive createTestArchive(){
+	public static EnterpriseArchive createTestArchive(){
+
 		JavaArchive arc =  ShrinkWrap.create(JavaArchive.class, "test.jar")
 				.addClasses(Driver.class, DriverRepository.class)
 				.addAsManifestResource("META-INF/test-persistence.xml", ArchivePaths.create("persistence.xml"));
 				//.addAsResource("META-INF/t2.xml", ArchivePaths.create("t2.xml"));
 
-		return arc;
+		EnterpriseArchive ear = ShrinkWrap.create(EnterpriseArchive.class, "test.ear")
+				.addAsLibrary(arc);
+
+		return ear;
 	}
 
 	@Test
