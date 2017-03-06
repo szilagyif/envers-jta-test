@@ -6,23 +6,34 @@
  */
 package org.hibernate.envers.bugs;
 
+import hu.transctrl.entity.Driver;
+import hu.transctrl.repository.DriverRepository;
 import org.hibernate.cfg.AvailableSettings;
 import org.hibernate.cfg.Configuration;
-import org.hibernate.envers.AuditReader;
+import org.jboss.arquillian.container.test.api.Deployment;
+import org.jboss.arquillian.junit.Arquillian;
+import org.jboss.shrinkwrap.api.ArchivePaths;
+import org.jboss.shrinkwrap.api.ShrinkWrap;
+import org.jboss.shrinkwrap.api.spec.JavaArchive;
 import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import javax.ejb.EJB;
 
 /**
  * This template demonstrates how to develop a test case for Hibernate Envers, using
  * its built-in unit test framework.
  */
+@RunWith(Arquillian.class)
 public class EnversUnitTestCase extends AbstractEnversTestCase {
 
-	// Add your entities here.
+	@EJB
+	DriverRepository driverRepository;
+
 	@Override
 	protected Class[] getAnnotatedClasses() {
 		return new Class[] {
-//				Foo.class,
-//				Bar.class
+				Driver.class
 		};
 	}
 
@@ -50,10 +61,26 @@ public class EnversUnitTestCase extends AbstractEnversTestCase {
 		//configuration.setProperty( AvailableSettings.GENERATE_STATISTICS, "true" );
 	}
 
-	// Add your tests, using standard JUnit.
+	@Deployment
+	public static JavaArchive createTestArchive(){
+		JavaArchive arc =  ShrinkWrap.create(JavaArchive.class, "test.jar")
+				.addClasses(Driver.class, DriverRepository.class)
+				.addAsManifestResource("META-INF/test-persistence.xml", ArchivePaths.create("persistence.xml"));
+				//.addAsResource("META-INF/t2.xml", ArchivePaths.create("t2.xml"));
+
+		return arc;
+	}
+
 	@Test
-	public void hhh123Test() throws Exception {
-		AuditReader reader = getAuditReader();
-		// Do stuff...
+	public void driverPersistTest() throws Exception {
+
+		Driver driver = new Driver();
+		driver.setId(1l);
+		driver.setName("Name");
+
+		driverRepository.storeAndFlush(driver);
+
+		//AuditReader reader = getAuditReader();
+
 	}
 }
